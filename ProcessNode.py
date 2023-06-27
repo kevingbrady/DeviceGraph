@@ -7,14 +7,13 @@ import inspect
 
 class ProcessNode:
 
-    children = []
-    child_processes = []
-    names = {}
-
     def __init__(self, process):
 
         self.name = process.name()
         self.graph = nx.DiGraph()
+        self.children = []
+        self.child_processes = []
+        self.names = {}
 
         process_dict = process.as_dict()
 

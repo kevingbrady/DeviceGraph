@@ -20,7 +20,8 @@ class ProcessGraph:
                 # process_node = ProcessNode(process)
                 # process_subgraph = process_node.getSubGraph()
                 if process.ppid() == 0 and process.pid != 0:
-                    self.head.append(self.createTree(process))
+                    head_node = self.createTree(process)
+                    self.head.append(head_node)
 
             except psutil.NoSuchProcess:
                 pass
@@ -28,9 +29,8 @@ class ProcessGraph:
     def createTree(self, node):
 
         process_node = ProcessNode(node)
-        self.graph.add_node(node)
-        self.labels[node] = node.name
-        print(process_node.name, node.pid)
+        self.graph.add_node(process_node)
+        self.labels[process_node] = process_node.name
 
         # print(process_node.process_string_repr())
         with open('process_graph_output.txt', 'a') as f:
