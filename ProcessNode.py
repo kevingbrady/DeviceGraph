@@ -30,7 +30,7 @@ class ProcessNode:
 
                 self.children.append(node)
 
-        #self._generateSubGraph()
+        self._generateSubGraph()
 
     def _extract_object_members(self, obj):
 
@@ -53,7 +53,7 @@ class ProcessNode:
 
         #print(node.name)
         self.graph.add_node(node)
-        self.names[node] = node.name
+        self.names[node] = node.name if type(node) is ProcessNode else node.node_string_repr()
 
         for child in node.children:
             self.graph.add_edge(node, child)
@@ -72,17 +72,17 @@ class ProcessNode:
 
         for node in self.graph.nodes:
             if type(node) is ProcessNode:
-                node_sizes.append(16000)
+                node_sizes.append(20000)
             elif len(node.children) > 5:
-                node_sizes.append(8000)
+                node_sizes.append(10000)
             elif len(node.children) > 3:
-                node_sizes.append(4000)
+                node_sizes.append(5000)
             else:
-                node_sizes.append(2000)
+                node_sizes.append(2500)
 
 
         fig = plt.figure(figsize=(84, 84))
-        pos = nx.spring_layout(self.graph, k=0.75, iterations=100)
+        pos = nx.spring_layout(self.graph, k=1, iterations=100)
 
         nx.draw_networkx_nodes(self.graph, pos, node_size=node_sizes, node_color='lightgray', edgecolors='black')
         nx.draw_networkx_edges(self.graph, pos, width=0.75)

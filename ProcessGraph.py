@@ -26,6 +26,8 @@ class ProcessGraph:
             except psutil.NoSuchProcess:
                 pass
 
+        self.head[0].printSubGraph()
+
     def createTree(self, node):
 
         process_node = ProcessNode(node)
