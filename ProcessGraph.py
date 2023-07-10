@@ -9,29 +9,33 @@ class ProcessGraph:
 
         open('process_graph_output.txt', 'w+')
 
-        process_tree = psutil.process_iter()
         self.labels = {}
         self.graph = nx.DiGraph()
         self.head = []
 
-        for process in process_tree:
+        process_tree = psutil.process_iter()
+        process = next(process_tree)
 
-            try:
-                # process_node = ProcessNode(process)
-                # process_subgraph = process_node.getSubGraph()
-                if process.ppid() == 0 and process.pid != 0:
-                    head_node = self.createTree(process)
-                    self.head.append(head_node)
+        while process.ppid() == 0:
+            print(process.name())
+            #try:
+            if process.pid != 0:
+                head_node = self.createTree(process)
+                self.head.append(head_node)
 
-            except psutil.NoSuchProcess:
-                pass
+            #except psutil.NoSuchProcess:
+             #   pass
 
-        self.head[0].printSubGraph()
+            process = next(process_tree)
+
+        #node = self.getNode('firefox')
+        #node.printSubGraph()
 
     def createTree(self, node):
 
         process_node = ProcessNode(node)
         self.graph.add_node(process_node)
+    #self.graph = nx.compose(self.graph, process_node.graph)
         self.labels[process_node] = process_node.name
 
         # print(process_node.process_string_repr())
@@ -60,3 +64,10 @@ class ProcessGraph:
                 node_sizes.append(1000)
 
         return node_sizes
+
+    def getNode(self, name):
+
+        for node in self.graph:
+            if node.name == name:
+                return node
+

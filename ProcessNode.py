@@ -1,8 +1,6 @@
 from Node import Node
 import networkx as nx
 import matplotlib.pyplot as plt
-import math
-import inspect
 
 
 class ProcessNode:
@@ -51,7 +49,6 @@ class ProcessNode:
 
     def addChildren(self, node):
 
-        #print(node.name)
         self.graph.add_node(node)
         self.names[node] = node.name if type(node) is ProcessNode else node.node_string_repr()
 
