@@ -18,11 +18,11 @@ class ProcessNode:
         for key, value in process_dict.items():
 
             if value not in (None, '', [], {}):
-                if isinstance(value, (int, str, float, list)):
+                if isinstance(value, (int, str, float)):
                     node = Node(key, value)
                 else:
                     node = Node(key, 'obj')
-                    members = self._extract_object_members(value)
+                    members = self._extract_object_members(key, value)
                     for k, v in members.items():
                         node.addChild(Node(k, v))
 
@@ -30,16 +30,25 @@ class ProcessNode:
 
         self._generateSubGraph()
 
-    def _extract_object_members(self, obj):
+    def _extract_object_members(self, name, obj):
 
         members = {}
 
-        for key in dir(obj):
-            if not key.startswith('_'):
+        if isinstance(obj, list):
 
-                value = getattr(obj, key)
-                if isinstance(value, (int, str, float)):
-                    members[key] = value
+            count = 0
+
+            for k in obj:
+                members[name + '(' + str(count) + ')'] = k
+                count += 1
+
+        else:
+            for key in dir(obj):
+                if not key.startswith('_'):
+
+                    value = getattr(obj, key)
+                    if isinstance(value, (int, str, float)):
+                        members[key] = value
 
         return members
 
